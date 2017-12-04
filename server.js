@@ -75,6 +75,11 @@ app.post('/user/add', (req, res) => {
   });
 });
 
+//Delete users
+app.delete('user/delete/:id', (req, res) => {
+  client.del(req.params.id);
+  res.redirect('/');
+})
 app.listen(port, () => {
   console.log('listen at port :', port);
 });
