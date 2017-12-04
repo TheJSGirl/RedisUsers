@@ -48,6 +48,11 @@ app.post('/user/search', (req, res) => {
   });
 });
 
+//Add userpage
+app.get('/user/add', (req, res) => {
+  res.render('adduser');
+});
+
 app.listen(port, () => {
   console.log('listen at port :', port);
 });
