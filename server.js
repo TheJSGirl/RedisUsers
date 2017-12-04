@@ -53,6 +53,28 @@ app.get('/user/add', (req, res) => {
   res.render('adduser');
 });
 
+//save user details
+app.post('/user/add', (req, res) => {
+  let id = req.body.id;
+  let first_name = req.body.first_name;
+  let last_name = req.body.last_name;
+  let email = req.body.email;
+  let mobile = req.body.mobile;
+
+  client.hmset(id, [
+    'firstName', first_name,
+    'lastName', last_name,
+    'email', email,
+    'mobile', mobile
+  ], (err, reply) => {
+    if(err){
+      console.log(err);
+    }
+    console.log(reply);
+    res.redirect('/');
+  });
+});
+
 app.listen(port, () => {
   console.log('listen at port :', port);
 });
