@@ -9,6 +9,12 @@ const port = 3000;
 //init app
 const app = express();
 
+//create redis client
+let client = redis.createClient();
+client.on('connect', () => {
+  console.log('connected to redis');
+});
+
 //view engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -20,10 +26,28 @@ app.use(bodyParser.urlencoded({extended:false}));
 //method override
 app.use(methodOverride('_method'));
 
+//Search Page
 app.get('/', (req, res) => {
   res.render('searchusers');
 });
 
+//Search processing
+app.post('/user/search', (req, res) => {
+  let id = req.body.id;
+  client.hgetall(id,  (err,obj) => {
+    if(!obj){
+      res.render('searchusers', {
+        error: 'User does not exist'
+      })
+    }else {
+      obj.id =id;
+      res.render('details', {
+        user: obj
+      })
+    }
+  });
+});
+
 app.listen(port, () => {
-  console.log('server started on port :', port);
-})
+  console.log('listen at port :', port);
+});
